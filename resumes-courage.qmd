@@ -1,0 +1,98 @@
+---
+title: "Resumes: Courage and Temperance"
+format:
+  html: default
+execute:
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+library(tidymodels)
+library(broom)
+library(marginaleffects)
+
+resumes <- read_csv("data/resumes.csv", show_col_types = FALSE) |>
+  mutate(call = as.factor(call))
+```
+
+## The Question
+
+Bertrand and Mullainathan (2004) sent 4,870 fictitious resumes to help-wanted ads in Boston and Chicago newspapers, randomly assigning each resume an African-American-sounding or White-sounding name. Our data records, for each resume, whether it received a callback, along with the name's connotation and the resume's characteristics.
+
+Imagine that you work for a civil rights organization in Chicago. You want to understand the process by which black US citizens are discriminated against in hiring today.
+
+The civil rights organization asks: What is the average causal effect of having a black-sounding name, rather than a white-sounding name, on the probability that a job applicant in Chicago today receives a callback?
+
+The setup chunk of this document loads the packages and the data. Today covers both Courage and Temperance, so the modeling and the answering happen in one meeting.
+
+## Courage
+
+### Candidate Models
+
+Estimate a model in which `call` is the outcome and `city` is the only covariate.
+
+
+
+Display the coefficients and their confidence intervals.
+
+
+
+Interpret the estimate for `citychicago`.
+
+
+
+Estimate a model in which `call` is the outcome and `city` and `ethnicity` are the covariates.
+
+
+
+Display the coefficients and their confidence intervals.
+
+
+
+Interpret the estimate for `ethnicitycauc`.
+
+
+
+Add `quality`, and its interaction with `ethnicity`, to the previous model.
+
+
+
+Display the coefficients and their confidence intervals.
+
+
+
+Interpret the estimate for the interaction `ethnicitycauc:qualitylow`.
+
+
+
+### The Data Generating Mechanism
+
+Which model should we choose, and why? Define `fit_resumes` as your chosen model.
+
+
+
+------------------------------------------------------------------------
+
+## Temperance
+
+### Predictions
+
+Use `predictions(fit_resumes, type = "prob")` to estimate the callback probability for individual resumes in the sample.
+
+
+
+### Visualizations
+
+Create a visualization of the average predictions by ethnicity using `plot_predictions()`.
+
+
+
+What measure of uncertainty is shown in this plot?
+
+
+
+------------------------------------------------------------------------
