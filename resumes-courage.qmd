@@ -35,9 +35,15 @@ The setup chunk of this document loads the packages and the data. Today covers b
 
 Estimate a model in which `call` is the outcome and `city` is the only covariate.
 
-
+```{r}
+logistic_reg() |>
+  fit(call ~ city, data = resumes) |>
+  tidy(conf.int = TRUE) 
+```
 
 Display the coefficients and their confidence intervals.
+
+
 
 
 
@@ -47,7 +53,11 @@ Interpret the estimate for `citychicago`.
 
 Estimate a model in which `call` is the outcome and `city` and `ethnicity` are the covariates.
 
-
+```{r}
+logistic_reg() |>
+  fit(call ~ city + ethnicity, data = resumes) |>
+  tidy(conf.int = TRUE) 
+```
 
 Display the coefficients and their confidence intervals.
 
@@ -73,6 +83,12 @@ Interpret the estimate for the interaction `ethnicitycauc:qualitylow`.
 
 Which model should we choose, and why? Define `fit_resumes` as your chosen model.
 
+```{r}
+fit_resumes <- logistic_reg() |>
+  fit(call ~ city + ethnicity + experience, data = resumes)
+
+tidy(fit_resumes, conf.int = TRUE)
+```
 
 
 ------------------------------------------------------------------------
@@ -83,11 +99,28 @@ Which model should we choose, and why? Define `fit_resumes` as your chosen model
 
 Use `predictions(fit_resumes, type = "prob")` to estimate the callback probability for individual resumes in the sample.
 
+```{r}
+predictions(fit_resumes, type = "prob") |>
+  as_tibble() |>
+  filter(group== "yes") 
+```
+
 
 
 ### Visualizations
 
 Create a visualization of the average predictions by ethnicity using `plot_predictions()`.
+
+```{r}
+plot_predictions(fit_resumes, by = "ethnicity", type = "prob", 
+                 conf_level = 0.95) +
+  labs(title = "Callback Probability by Ethnicity (with 95% CI)",
+       y = "Predicted Callback Probability",
+       x = "Ethnicity") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_line(color = "gray90"))
+```
 
 
 
